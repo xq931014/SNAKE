@@ -1,0 +1,87 @@
+@bg-color: #b7d4a8;;
+
+* {
+  margin: 0;
+  padding: 0;
+  // 盒子的宽度设置的是多少就是多少，不带上padding
+  box-sizing: border-box;
+}
+
+body {
+  font: bold 20px "Courier"
+}
+
+#main {
+  width: 360px;
+  height: 420px;
+  background-color: @bg-color;
+  // 居中
+  margin: 120px auto;
+  border: 10px solid black;
+  border-radius: 40px;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-around;
+  // 好家伙，沿着次轴一直设置错了，不是align-content 而是align-items
+  align-items: center;
+
+  #stage {
+    // 浏览器中可使用calc来避免写死宽度（尤其要注意好边框border啊），RN中该写法无效
+    // 36是怎么来的，360 - 10 * 2 - 304
+    // width: 304px;
+    width: calc(100% - 36px);
+
+    height: 304px;
+    border: 2px solid black;
+    box-sizing: border-box;
+
+    // padding: 20px;
+    position: relative;
+
+    // 使用Mixin抽离公共样式
+    // .snake-segment() 括号可带可不带
+    #commonStyle {
+      background-color: black;
+      width: 10px;
+      height: 10px;
+      border: solid @bg-color;
+      position: absolute
+    }
+
+    #snake {
+      &>div {
+        #commonStyle;
+        // 注意有无设置left和top时，起点的区别
+        // left: 0;
+        // top: 0;
+      }
+    }
+
+    #food {
+      #commonStyle;
+      top: 100px;
+      left: 40px;
+      background-color: transparent;
+      border: 0px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      // 开启换行的条件下，才可以使用align-content
+      align-content: space-between;
+
+      &>div {
+        width: 4px;
+        height: 4px;
+        background-color: black;
+        transform: rotate(45deg);
+      }
+    }
+  }
+
+  #score-panel {
+    // 如何保持跟兄弟视图一样宽？？？
+    width: calc(100% - 40px);
+    display: flex;
+    justify-content: space-between;
+  }
+}
